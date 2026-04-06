@@ -12,9 +12,12 @@ I used these extensions SQLite by alexcvzz, PHP Intelephense by PHP code intelli
 
 4. ctrl + ` to open the terminal and type these commands:
     a. composer install (to install)
-    b. composer run dev (to run server)
+    b. php artisan migrate
+    c. composer run dev (to run server)
+    
 
 5. extract .env file in MBPL (provided by the dev)
+
 
 
 To enable google auth
@@ -27,3 +30,17 @@ To enable google auth
     Ex.
     curl.cainfo = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
     openssl.cafile = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
+
+
+Sample accounts:
+Admin
+    email: admin@mbpl.com
+    password: Admin@12345
+Manager
+    email: manager@mbpl.com
+    password: Manager@12345
+Staff
+    email: staff@mbpl.com
+    password: Staff@12345
+
+
