@@ -33,13 +33,13 @@ To enable google auth
 
 
 Sample accounts for employee:
-Admin
+1. Admin
     email: admin@mbpl.com
     password: Admin@12345
-Manager
+2. Manager
     email: manager@mbpl.com
     password: Manager@12345
-Staff
+3. Staff
     email: staff@mbpl.com
     password: Staff@12345
 
