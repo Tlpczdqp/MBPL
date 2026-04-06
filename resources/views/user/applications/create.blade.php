@@ -441,7 +441,6 @@
                                 ['Branch Office', 'bi-building-add', 'Additional branch'],
                                 ['Admin Office Only', 'bi-clipboard', 'Administrative operations'],
                                 ['Warehouse', 'bi-box-seam', 'Storage facility'],
-                                ['Others', 'bi-three-dots', 'Please specify'],
                             ] as [$value, $icon, $desc])
                             <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg border-2 border-slate-200 transition
                                           hover:border-blue-300 hover:bg-blue-50/50

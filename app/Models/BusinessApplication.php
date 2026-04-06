@@ -90,7 +90,6 @@ class BusinessApplication extends Model
         return $this->status === 'permit_issued';
     }
 
-    // Generate a unique application number like BPA-2024-00001
     public static function generateApplicationNumber(): string
     {
         $year    = date('Y');
@@ -99,7 +98,7 @@ class BusinessApplication extends Model
             ? (intval(substr($lastApp->application_number, -5)) + 1)
             : 1;
 
-        return 'BPA-' . $year . '-' . str_pad($nextNum, 5, '0', STR_PAD_LEFT);
+        return 'MBPL-' . $year . '-' . str_pad($nextNum, 5, '0', STR_PAD_LEFT);
     }
 
     // Get a human-readable status label

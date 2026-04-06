@@ -142,7 +142,7 @@ Route::prefix('user/{userId}')
         ->name('business.renew');
     Route::post('/applications/{application}/renew', [App\Http\Controllers\User\BusinessApplicationController::class, 'storeRenewal'])
         ->name('business.renew.store');
-
+    
     // Payment
     Route::get('/applications/{application}/pay', [App\Http\Controllers\User\PaymentController::class, 'showPayment'])
         ->name('payment.show');

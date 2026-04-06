@@ -87,7 +87,7 @@ return new class extends Migration {
             ])->default('pending');
 
             $table->text('rejection_reason')->nullable(); // why was it rejected?
-            $table->string('application_number')->unique(); // e.g. BPA-2024-00001
+            $table->string('application_number')->unique(); // e.g. MBPL-2026-00001
             $table->decimal('permit_fee', 10, 2)->nullable(); // fee set by manager/admin
             $table->timestamp('permit_issued_at')->nullable();
             $table->date('permit_valid_until')->nullable();
