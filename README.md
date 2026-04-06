@@ -32,7 +32,7 @@ To enable google auth
     openssl.cafile = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
 
 
-Sample accounts:
+Sample accounts for employee:
 Admin
     email: admin@mbpl.com
     password: Admin@12345
