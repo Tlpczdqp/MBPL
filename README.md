@@ -11,9 +11,10 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 I used these extensions SQLite by alexcvzz, PHP Intelephense by PHP code intelligence, PHP by       All-in-One, Laravel goto view by codingyu, Laravel Extra Intellisense by amir, Laravel Blade Snippets by Winnie Lin, Laravel Blade formatter by Shuhei Hayashibara, IntelliPHP by DEVSENSE, Composer by DEVSENSE
 
 4. ctrl + ` to open the terminal and type these commands:
-    a. composer install (to install)
-    b. php artisan migrate
-    c. composer run dev (to run server)
+    1. composer install (to install)
+    2. php artisan migrate
+    3. php artisan db:seed
+    4. composer run dev (to run server)
     
 
 5. extract .env file in MBPL (provided by the dev)
