@@ -18,7 +18,7 @@ class SocialAuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            // Get the user data Google sends back
+            // Get the user data Google sends back. ignore error
             $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (\Exception $e) {
             //test
