@@ -12,21 +12,22 @@ class SocialAuthController extends Controller
     public function redirectToGoogle()
     {
         // Redirect user to Google's OAuth page
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function handleGoogleCallback()
     {
         try {
             // Get the user data Google sends back
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (\Exception $e) {
             //test
-            dd([
-            'error'   => $e->getMessage(),
-            'file'    => $e->getFile(),
-            'line'    => $e->getLine(),
-        ]);
+        //     dd([
+        //     'error'   => $e->getMessage(),
+        //     'file'    => $e->getFile(),
+        //     'line'    => $e->getLine(),
+        // ]);
+        
 
             return redirect()->route('user.login')
                 ->with('error', 'Google login failed. Please try again.');
@@ -59,14 +60,20 @@ class SocialAuthController extends Controller
     // FACEBOOK 
     public function redirectToFacebook()
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('facebook')->stateless()->redirect();
     }
 
     public function handleFacebookCallback()
     {
         try {
-            $fbUser = Socialite::driver('facebook')->user();
+            $fbUser = Socialite::driver('facebook')->stateless()->user();
         } catch (\Exception $e) {
+        //     dd([
+        //     'error_class' => get_class($e),
+        //     'message'     => $e->getMessage(),
+        //     'file'        => $e->getFile(),
+        //     'line'        => $e->getLine(),
+        // ]);
             return redirect()->route('user.login')
                 ->with('error', 'Facebook login failed. Please try again.');
         }

@@ -65,8 +65,9 @@
                 </a>
             </li>
         </ul>
-
-        <div>
+        
+        {{-- removed applications --}}
+        {{-- <div>
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider
                        mb-1 px-2">
                 Applications</p>
@@ -92,7 +93,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> --}}
 
         <div>
             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 px-2">Management</p>

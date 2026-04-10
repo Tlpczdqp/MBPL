@@ -170,7 +170,7 @@ return [
     */
 
     // 'secure' => env('SESSION_SECURE_COOKIE'),
-    'secure'   => env('SESSION_SECURE_COOKIE', false), //  false for ngrok http
+    'secure'   => env('SESSION_SECURE_COOKIE', true), //  false for ngrok http
     'same_site' => 'lax',                               //  allows cross-site redirects
     'domain'   => env('SESSION_DOMAIN', null),          //  null = use current domain
 
