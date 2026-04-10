@@ -186,7 +186,6 @@ class BusinessApplication extends Model implements Auditable
     $fromDate = $fromDate ? \Carbon\Carbon::parse($fromDate) : now();
 
     return match (strtolower(trim($this->billing_freq))) {
-        'monthly'       => $fromDate->copy()->addMonth(),
         'quarterly'     => $fromDate->copy()->addMonths(3),
         'bi-annually'   => $fromDate->copy()->addMonths(6),
         'bi annually'   => $fromDate->copy()->addMonths(6),

@@ -156,7 +156,7 @@
                         @php
                             $selectedBilling = old('billing_freq', $application->billing_freq);
                             $billingOptions = [
-                                'monthly' => 'Monthly',
+                                
                                 'quarterly' => 'Quarterly',
                                 'bi-annually' => 'Bi-Annually',
                                 'annually' => 'Annually',
