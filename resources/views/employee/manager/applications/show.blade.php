@@ -185,275 +185,256 @@
                     @endphp
 
                     <div class="space-y-3">
-    @forelse($application->documents as $doc)
-        <div
-            class="flex items-center justify-between p-3 rounded-xl
+                        @forelse($application->documents as $doc)
+                            <div
+                                class="flex items-center justify-between p-3 rounded-xl
                 border border-slate-100 bg-slate-50 hover:bg-slate-100 transition">
-            <div class="flex items-center gap-3">
-                <div
-                    class="h-10 w-10 rounded-lg bg-blue-100 flex items-center
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="h-10 w-10 rounded-lg bg-blue-100 flex items-center
                         justify-center text-blue-600">
-                    <i class="bi {{ $docIcons[$doc->document_type] ?? 'bi-file-earmark' }} text-lg"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-800">
-                        {{ $docLabels[$doc->document_type] ?? $doc->document_type }}
-                    </p>
-                    <p class="text-xs text-slate-400">
-                        {{ $doc->file_name }} · {{ number_format($doc->file_size / 1024, 1) }} KB
-                    </p>
-                </div>
-            </div>
+                                        <i
+                                            class="bi {{ $docIcons[$doc->document_type] ?? 'bi-file-earmark' }} text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-800">
+                                            {{ $docLabels[$doc->document_type] ?? $doc->document_type }}
+                                        </p>
+                                        <p class="text-xs text-slate-400">
+                                            {{ $doc->file_name }} · {{ number_format($doc->file_size / 1024, 1) }} KB
+                                        </p>
+                                    </div>
+                                </div>
 
-            <a href="{{ route('user.business.document.view', [
-        'userId' => $application->user_id,
-        'application' => $application->id,
-        'document' => $doc->id,
-    ]) }}"
-   target="_blank"
-   class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
-    <i class="bi bi-eye mr-1"></i>View
-</a>
-        </div>
-    @empty
-        <p class="text-sm text-slate-400 text-center py-4">No documents found.</p>
-    @endforelse
-</div>
-
-                
-                {{-- Payment Info (if paid) --}}
-@if($application->payment)
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h2 class="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">
-            <i class="bi bi-credit-card mr-2 text-green-500"></i>Payment Information
-        </h2>
-        <div class="grid grid-cols-2 gap-4 text-sm">
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                    Payment Method
-                </p>
-                <p class="text-slate-900 font-medium mt-0.5 capitalize">
-                    {{ str_replace('_', ' ', $application->payment->payment_method ?? '—') }}
-                </p>
-            </div>
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                    PayMongo Payment ID
-                </p>
-                <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs">
-                    {{ $application->payment->paymongo_payment_id ?? '—' }}
-                </p>
-            </div>
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Amount</p>
-                <p class="text-slate-900 font-bold mt-0.5 text-lg">
-                    ₱{{ number_format($application->payment->amount, 2) }}
-                </p>
-            </div>
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                    Payment Status
-                </p>
-                <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold
-                             {{ $application->payment->status === 'paid'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-yellow-100 text-yellow-700' }}">
-                    {{ ucfirst($application->payment->status) }}
-                </span>
-            </div>
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Paid On</p>
-                <p class="text-slate-900 font-medium mt-0.5">
-                    {{ $application->payment->paid_at?->format('M d, Y h:i A') ?? '—' }}
-                </p>
-            </div>
-            <div>
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                    Checkout ID
-                </p>
-                <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs truncate">
-                    {{ $application->payment->paymongo_checkout_id ?? '—' }}
-                </p>
-            </div>
-        </div>
-    </div>
-@endif
-
-            </div>
-
-            {{-- RIGHT: Action Panel --}}
-            <div class="space-y-4">
-
-                {{-- Applicant Info Card --}}
-                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-                    <h3 class="text-sm font-semibold text-slate-700 mb-3">Applicant</h3>
-                    <div class="flex items-center gap-3 mb-3">
-                        <div
-                            class="h-10 w-10 rounded-full bg-blue-600 flex items-center
-                                justify-center text-white font-bold text-sm flex-shrink-0">
-                            {{ strtoupper(substr($application->user->name, 0, 1)) }}
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold text-slate-900 truncate">
-                                {{ $application->user->name }}
-                            </p>
-                            <p class="text-xs text-slate-400 truncate">{{ $application->user->email }}</p>
-                        </div>
+                                <a href="{{ route('user.business.document.view', [
+                                    'userId' => $application->user_id,
+                                    'application' => $application->id,
+                                    'document' => $doc->id,
+                                ]) }}"
+                                    target="_blank"
+                                    class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
+                                    <i class="bi bi-eye mr-1"></i>View
+                                </a>
+                            </div>
+                        @empty
+                            <p class="text-sm text-slate-400 text-center py-4">No documents found.</p>
+                        @endforelse
                     </div>
-                    <p class="text-xs text-slate-500">
-                        <i class="bi bi-calendar3 mr-1"></i>
-                        Applied {{ $application->created_at->format('M d, Y') }}
-                    </p>
+
+
+                    {{-- Payment Info (if paid) --}}
+                    
+                </div>
                 </div>
 
-                {{-- ── APPROVE PANEL ─────────────────────────── --}}
-                @if (in_array($application->status, ['pending', 'under_review']))
+                {{-- RIGHT: Action Panel --}}
+                <div class="space-y-4">
+
+                    {{-- Applicant Info Card --}}
                     <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-                        <h3 class="text-sm font-semibold text-slate-700 mb-3">Approve Application</h3>
-                        <form method="POST"
-                            action="{{ route('employee.manager.applications.approve', $application->id) }}"
-                            class="space-y-3">
-                            @csrf
-                            <div>
-                                <label for="permit_fee" class="block text-xs font-semibold text-slate-600 mb-1">
-                                    Set Permit Fee (₱) <span class="text-red-500">*</span>
-                                </label>
-                                <input id="permit_fee" type="number" name="permit_fee" step="0.01" min="1"
-                                    placeholder="e.g. 1500.00"
-                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300
-                                          focus:outline-none focus:ring-2 focus:ring-green-500
-                                          focus:border-green-500 transition" />
-                                @error('permit_fee')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+                        <h3 class="text-sm font-semibold text-slate-700 mb-3">Applicant</h3>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div
+                                class="h-10 w-10 rounded-full bg-blue-600 flex items-center
+                                justify-center text-white font-bold text-sm flex-shrink-0">
+                                {{ strtoupper(substr($application->user->name, 0, 1)) }}
                             </div>
-                            <button type="submit" onclick="return confirm('Approve this application?')"
-                                class="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white
-                                       text-sm font-semibold rounded-lg transition-colors">
-                                <i class="bi bi-check-circle mr-1"></i>
-                                Approve Application
-                            </button>
-                        </form>
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-slate-900 truncate">
+                                    {{ $application->user->name }}
+                                </p>
+                                <p class="text-xs text-slate-400 truncate">{{ $application->user->email }}</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            <i class="bi bi-calendar3 mr-1"></i>
+                            Applied {{ $application->created_at->format('M d, Y') }}
+                        </p>
                     </div>
 
-                    {{-- ── REJECT PANEL ──────────────────────── --}}
-                    <div class="bg-white rounded-2xl border border-red-100 p-5 shadow-sm">
-                        <h3 class="text-sm font-semibold text-red-700 mb-3">Reject Application</h3>
-                        <form method="POST"
-                            action="{{ route('employee.manager.applications.reject', $application->id) }}"
-                            class="space-y-3">
-                            @csrf
-                            <div>
-                                <label for="rejection_reason" class="block text-xs font-semibold text-slate-600 mb-1">
-                                    Reason for Rejection <span class="text-red-500">*</span>
-                                </label>
-                                <textarea id="rejection_reason" name="rejection_reason" rows="4"
-                                    placeholder="Explain why this application is being rejected..."
-                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300
-                                             resize-none focus:outline-none focus:ring-2
-                                             focus:ring-red-500 focus:border-red-500 transition">{{ old('rejection_reason') }}</textarea>
-                                @error('rejection_reason')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <button type="submit"
-                                onclick="return confirm('Reject this application? This cannot be undone.')"
-                                class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white
-                                       text-sm font-semibold rounded-lg transition-colors">
-                                <i class="bi bi-x-circle mr-1"></i>
-                                Reject Application
-                            </button>
-                        </form>
-                    </div>
-                @endif
-
-                {{-- ── ISSUE PERMIT (if paid and verified) ──── --}}
-                {{-- @if ($application->status === 'paid' && $application->payment?->status === 'verified')
-                <div class="bg-white rounded-2xl border border-emerald-200 p-5 shadow-sm">
-                    <h3 class="text-sm font-semibold text-emerald-700 mb-3">
-                        <i class="bi bi-award mr-1"></i>Issue Permit
-                    </h3>
-                    <p class="text-xs text-slate-500 mb-3">
-                        Payment has been verified. You can now officially issue the business permit.
-                    </p>
-                    <form method="POST"
-                          action="{{ route('employee.manager.applications.issue', $application->id) }}">
-                        @csrf
-                        <button type="submit"
-                                onclick="return confirm('Issue the permit for this application?')"
-                                class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white
-                                       text-sm font-semibold rounded-lg transition-colors">
-                            <i class="bi bi-award mr-1"></i>
-                            Issue Business Permit
-                        </button>
-                    </form>
-                </div>
-            @endif --}}
-                {{-- ── ISSUE PERMIT ──────────────────────────────────────── --}}
-                {{-- Shows when application is paid (payment confirmed by PayMongo) --}}
-                @if ($application->status === 'paid')
-                    <div class="bg-white rounded-2xl border border-emerald-200 p-5 shadow-sm">
-                        <h3 class="text-sm font-semibold text-emerald-700 mb-2">
-                            <i class="bi bi-award mr-1"></i>Issue Permit
-                        </h3>
-
-                        {{-- Show payment details --}}
-                        @if ($application->payment)
-                            <div class="bg-emerald-50 rounded-lg p-3 mb-3 space-y-1.5">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Amount Paid</span>
-                                    <span class="font-semibold text-slate-800">
+                    @if ($application->payment)
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                            <h2 class="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <i class="bi bi-credit-card mr-2 text-green-500"></i>Payment Information
+                            </h2>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                        Payment Method
+                                    </p>
+                                    <p class="text-slate-900 font-medium mt-0.5 capitalize">
+                                        {{ str_replace('_', ' ', $application->payment->payment_method ?? '—') }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                        PayMongo Payment ID
+                                    </p>
+                                    <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs">
+                                        {{ $application->payment->paymongo_payment_id ?? '—' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Amount</p>
+                                    <p class="text-slate-900 font-bold mt-0.5 text-lg">
                                         ₱{{ number_format($application->payment->amount, 2) }}
-                                    </span>
+                                    </p>
                                 </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Payment Method</span>
-                                    <span class="font-semibold text-slate-800 capitalize">
-                                        {{ str_replace('_', ' ', $application->payment->payment_method ?? 'Online') }}
-                                    </span>
-                                </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Paid On</span>
-                                    <span class="font-semibold text-slate-800">
-                                        {{ $application->payment->paid_at?->format('M d, Y h:i A') ?? '—' }}
-                                    </span>
-                                </div>
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-500">Status</span>
-                                    <span class="font-semibold text-emerald-700 capitalize">
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                        Payment Status
+                                    </p>
+                                    <span
+                                        class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold
+                             {{ $application->payment->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                                         {{ ucfirst($application->payment->status) }}
                                     </span>
                                 </div>
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Paid On</p>
+                                    <p class="text-slate-900 font-medium mt-0.5">
+                                        {{ $application->payment->paid_at?->format('M d, Y h:i A') ?? '—' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                        Checkout ID
+                                    </p>
+                                    <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs truncate">
+                                        {{ $application->payment->paymongo_checkout_id ?? '—' }}
+                                    </p>
+                                </div>
                             </div>
-                        @endif
+                        </div>
+                    @endif
 
-                        <p class="text-xs text-slate-500 mb-3">
-                            Payment confirmed via PayMongo. You can now issue the business permit.
-                        </p>
+                    {{-- ── APPROVE PANEL ─────────────────────────── --}}
+                    @if (in_array($application->status, ['pending', 'under_review']))
+                        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3">Approve Application</h3>
+                            <form method="POST"
+                                action="{{ route('employee.manager.applications.approve', $application->id) }}"
+                                class="space-y-3">
+                                @csrf
+                                <div>
+                                    <label for="permit_fee" class="block text-xs font-semibold text-slate-600 mb-1">
+                                        Set Permit Fee (₱) <span class="text-red-500">*</span>
+                                    </label>
+                                    <input id="permit_fee" type="number" name="permit_fee" step="0.01"
+                                        min="1" placeholder="e.g. 1500.00"
+                                        class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300
+                                          focus:outline-none focus:ring-2 focus:ring-green-500
+                                          focus:border-green-500 transition" />
+                                    @error('permit_fee')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <button type="submit" onclick="return confirm('Approve this application?')"
+                                    class="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white
+                                       text-sm font-semibold rounded-lg transition-colors">
+                                    <i class="bi bi-check-circle mr-1"></i>
+                                    Approve Application
+                                </button>
+                            </form>
+                        </div>
 
-                        <form method="POST"
-                            action="{{ route('employee.manager.applications.issue', $application->id) }}">
-                            @csrf
-                            <button type="submit" onclick="return confirm('Issue the permit for this application?')"
-                                class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white
+                        {{-- ── REJECT PANEL ──────────────────────── --}}
+                        <div class="bg-white rounded-2xl border border-red-100 p-5 shadow-sm">
+                            <h3 class="text-sm font-semibold text-red-700 mb-3">Reject Application</h3>
+                            <form method="POST"
+                                action="{{ route('employee.manager.applications.reject', $application->id) }}"
+                                class="space-y-3">
+                                @csrf
+                                <div>
+                                    <label for="rejection_reason" class="block text-xs font-semibold text-slate-600 mb-1">
+                                        Reason for Rejection <span class="text-red-500">*</span>
+                                    </label>
+                                    <textarea id="rejection_reason" name="rejection_reason" rows="4"
+                                        placeholder="Explain why this application is being rejected..."
+                                        class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300
+                                             resize-none focus:outline-none focus:ring-2
+                                             focus:ring-red-500 focus:border-red-500 transition">{{ old('rejection_reason') }}</textarea>
+                                    @error('rejection_reason')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <button type="submit"
+                                    onclick="return confirm('Reject this application? This cannot be undone.')"
+                                    class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white
+                                       text-sm font-semibold rounded-lg transition-colors">
+                                    <i class="bi bi-x-circle mr-1"></i>
+                                    Reject Application
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+
+                    
+                    {{-- ── ISSUE PERMIT ──────────────────────────────────────── --}}
+                    {{-- Shows when application is paid (payment confirmed by PayMongo) --}}
+                    @if ($application->status === 'paid')
+                        <div class="bg-white rounded-2xl border border-emerald-200 p-5 shadow-sm">
+                            <h3 class="text-sm font-semibold text-emerald-700 mb-2">
+                                <i class="bi bi-award mr-1"></i>Issue Permit
+                            </h3>
+
+                            {{-- Show payment details --}}
+                            @if ($application->payment)
+                                <div class="bg-emerald-50 rounded-lg p-3 mb-3 space-y-1.5">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Amount Paid</span>
+                                        <span class="font-semibold text-slate-800">
+                                            ₱{{ number_format($application->payment->amount, 2) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Payment Method</span>
+                                        <span class="font-semibold text-slate-800 capitalize">
+                                            {{ str_replace('_', ' ', $application->payment->payment_method ?? 'Online') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Paid On</span>
+                                        <span class="font-semibold text-slate-800">
+                                            {{ $application->payment->paid_at?->format('M d, Y h:i A') ?? '—' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-slate-500">Status</span>
+                                        <span class="font-semibold text-emerald-700 capitalize">
+                                            {{ ucfirst($application->payment->status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <p class="text-xs text-slate-500 mb-3">
+                                Payment confirmed via PayMongo. You can now issue the business permit.
+                            </p>
+
+                            <form method="POST"
+                                action="{{ route('employee.manager.applications.issue', $application->id) }}">
+                                @csrf
+                                <button type="submit" onclick="return confirm('Issue the permit for this application?')"
+                                    class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white
                            text-sm font-semibold rounded-lg transition-colors">
-                                <i class="bi bi-award mr-1"></i>
-                                Issue Business Permit
-                            </button>
-                        </form>
-                    </div>
-                @endif
+                                    <i class="bi bi-award mr-1"></i>
+                                    Issue Business Permit
+                                </button>
+                            </form>
+                        </div>
+                    @endif
 
-                {{-- Rejection Reason (if rejected) --}}
-                @if ($application->status === 'rejected' && $application->rejection_reason)
-                    <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
-                        <h3 class="text-sm font-semibold text-red-700 mb-2">Rejection Reason</h3>
-                        <p class="text-sm text-red-600">{{ $application->rejection_reason }}</p>
-                    </div>
-                @endif
+                    {{-- Rejection Reason (if rejected) --}}
+                    @if ($application->status === 'rejected' && $application->rejection_reason)
+                        <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
+                            <h3 class="text-sm font-semibold text-red-700 mb-2">Rejection Reason</h3>
+                            <p class="text-sm text-red-600">{{ $application->rejection_reason }}</p>
+                        </div>
+                    @endif
 
+                </div>
             </div>
-        </div>
 
-    </div>
-@endsection
+        </div>
+    @endsection

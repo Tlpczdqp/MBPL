@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,8 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak] { display: none !important; }</style>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
+
 <body class="bg-white">
 
     {{--
@@ -18,18 +24,25 @@
 
         On mobile: only the right column shows (left is hidden with 'hidden lg:flex')
     --}}
-    <div class="relative grid min-h-dvh items-center justify-center
+    <div
+        class="relative grid min-h-dvh items-center justify-center
                 lg:max-w-none lg:grid-cols-2 lg:px-0">
 
         <!-- LEFT PANEL: Dark background, logo, decorative text -->
-        <div class="relative hidden h-full flex-col bg-zinc-900 p-10 text-white lg:flex">
+        <div class="relative hidden h-full flex-col overflow-hidden bg-zinc-900 p-10 text-white lg:flex">
+            <!-- Background image -->
+            <div class="absolute inset-0 z-0">
+                <img src="{{ asset('images/blue-bg.png') }}" alt="Background"
+                    class="h-full w-full object-cover opacity-700" />
+            </div>
+
+            <!-- Optional dark overlay -->
+            <div class="absolute inset-0 z-10 bg-zinc-900/60"></div>
+
             <!-- Logo top left -->
             <a href="{{ url('/') }}" class="relative z-20 flex items-center text-lg font-medium">
-                {{-- Logo image from public folder --}}
-                <img src="{{ asset('images/logo.png') }}"
-                     alt="Logo"
-                     class="mr-3 h-10 w-10 object-contain"
-                     onerror="this.style.display='none'" />
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="mr-3 h-10 w-10 object-contain"
+                    onerror="this.style.display='none'" />
                 <span class="font-bold text-white">Municipal Business Permit</span>
             </a>
 
@@ -51,9 +64,7 @@
 
             <!-- Mobile logo (shown only on small screens) -->
             <div class="mb-6 flex justify-center lg:hidden">
-                <img src="{{ asset('images/logo.png') }}"
-                     alt="Logo"
-                     class="h-16 w-16 object-contain" />
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-16 object-contain" />
             </div>
 
             <div class="mx-auto w-full max-w-sm">
@@ -65,8 +76,11 @@
     {{-- Prevent browser back button from loading cached login page --}}
     <script>
         window.addEventListener('pageshow', function(event) {
-            if (event.persisted) { window.location.reload(); }
+            if (event.persisted) {
+                window.location.reload();
+            }
         });
     </script>
 </body>
+
 </html>
