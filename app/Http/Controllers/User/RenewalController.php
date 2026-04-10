@@ -69,10 +69,10 @@ class RenewalController extends Controller
             'business_activity'   => ['required', 'string', 'max:100'],
 
             // Step 4 — Documents
-            'dti_certificate'     => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:2048'],
-            'valid_id'            => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:2048'],
-            'photo_of_business'   => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:2048'],
-            'location_sketch'     => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:2048'],
+            'dti_certificate'     => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:10240'],
+            'valid_id'            => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:10240'],
+            'photo_of_business'   => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:10240'],
+            'location_sketch'     => ['required', 'file', 'mimes:jpg,jpeg,png,pdf,gif', 'max:10240'],
         ]);
 
         // Generate new application number

@@ -113,7 +113,7 @@
 
         {{-- Password strength indicator --}}
         {{-- Simple Alpine.js reactive checker --}}
-        <div x-data="{
+        {{-- <div x-data="{
                 password: '',
                 get strength() {
                     if (this.password.length === 0) return null;
@@ -159,7 +159,7 @@
                     </div>
                 </div>
             </template>
-        </div>
+        </div> --}}
 
         {{-- Submit --}}
         <button type="submit"

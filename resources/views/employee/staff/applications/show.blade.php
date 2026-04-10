@@ -213,63 +213,62 @@
 
 
             {{-- Payment Info (if paid) --}}
-            @if($application->payment)
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h2 class="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">
-                        <i class="bi bi-credit-card mr-2 text-green-500"></i>Payment Information
-                    </h2>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                                Payment Method
-                            </p>
-                            <p class="text-slate-900 font-medium mt-0.5 capitalize">
-                                {{ str_replace('_', ' ', $application->payment->payment_method) }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                                Reference No.
-                            </p>
-                            <p class="text-slate-900 font-medium mt-0.5 font-mono">
-                                {{ $application->payment->reference_number }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Amount</p>
-                            <p class="text-slate-900 font-bold mt-0.5 text-lg">
-                                ₱{{ number_format($application->payment->amount, 2) }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                                Payment Status
-                            </p>
-                            <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold
-                                         {{ $application->payment->status === 'verified'
-                                            ? 'bg-green-100 text-green-700'
-                                            : 'bg-yellow-100 text-yellow-700' }}">
-                                {{ ucfirst($application->payment->status) }}
-                            </span>
-                        </div>
-                    </div>
-
-                    {{-- Verify payment button --}}
-                    @if($application->payment->status === 'pending')
-                        <form method="POST"
-                              action="{{ route('employee.manager.payments.verify', $application->payment->id) }}"
-                              class="mt-4">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white
-                                           text-sm font-semibold rounded-lg transition-colors">
-                                <i class="bi bi-check-circle mr-1"></i>
-                                Verify Payment & Mark as Paid
-                            </button>
-                        </form>
-                    @endif
-                </div>
-            @endif
+@if($application->payment)
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+            <i class="bi bi-credit-card mr-2 text-green-500"></i>Payment Information
+        </h2>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    Payment Method
+                </p>
+                <p class="text-slate-900 font-medium mt-0.5 capitalize">
+                    {{ str_replace('_', ' ', $application->payment->payment_method ?? '—') }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    PayMongo Payment ID
+                </p>
+                <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs">
+                    {{ $application->payment->paymongo_payment_id ?? '—' }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Amount</p>
+                <p class="text-slate-900 font-bold mt-0.5 text-lg">
+                    ₱{{ number_format($application->payment->amount, 2) }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    Payment Status
+                </p>
+                <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold
+                             {{ $application->payment->status === 'paid'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-yellow-100 text-yellow-700' }}">
+                    {{ ucfirst($application->payment->status) }}
+                </span>
+            </div>
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Paid On</p>
+                <p class="text-slate-900 font-medium mt-0.5">
+                    {{ $application->payment->paid_at?->format('M d, Y h:i A') ?? '—' }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    Checkout ID
+                </p>
+                <p class="text-slate-900 font-medium mt-0.5 font-mono text-xs truncate">
+                    {{ $application->payment->paymongo_checkout_id ?? '—' }}
+                </p>
+            </div>
+        </div>
+    </div>
+@endif
 
         </div>
 

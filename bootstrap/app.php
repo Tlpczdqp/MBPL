@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.employee' => \App\Http\Middleware\AuthenticateEmployee::class,
             'role'          => \App\Http\Middleware\CheckEmployeeRole::class,
         ]);
+        $middleware->preventRequestForgery(except: [
+            'webhook/paymongo',
+        ]);
+        
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

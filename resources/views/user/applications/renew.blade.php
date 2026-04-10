@@ -796,7 +796,7 @@
                         <div>
                             <p class="text-sm font-semibold text-blue-800">All 4 documents are required</p>
                             <p class="text-xs text-blue-600 mt-0.5">
-                                Accepted formats: JPEG, PNG, PDF, GIF — Max 2MB each
+                                Accepted formats: JPEG, PNG, PDF, GIF — Max 10MB each
                             </p>
                         </div>
                     </div>

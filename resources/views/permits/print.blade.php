@@ -1,8 +1,4 @@
-{{--
-    This is a standalone print page — NO sidebar or navbar.
-    We use a clean print-friendly layout.
-    window.print() is called automatically on load.
---}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

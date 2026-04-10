@@ -1,6 +1,10 @@
 @extends('layouts.employee')
 @section('title', 'Employee Dashboard')
 
+@push('meta_refresh')
+    <meta http-equiv="refresh" content="60">
+@endpush
+
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
 

@@ -1,10 +1,15 @@
 <?php
 namespace App\Models;
 
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class BusinessApplication extends Model
+class BusinessApplication extends Model implements Auditable
 {
+    use AuditableTrait; 
     protected $fillable = [
         'user_id',
         'processed_by',
@@ -54,6 +59,52 @@ class BusinessApplication extends Model
         ];
     }
 
+    //Audit
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'restored',
+    ];
+
+    // ── Only track these important columns ─────────────────
+    protected $auditInclude = [
+        'status',
+        'business_name',
+        'transact_type',
+        'application_number',
+    ];
+
+    // ── Keep last 50 audits per application ────────────────
+    protected $auditThreshold = 50;
+
+    // ── Custom audit messages ──────────────────────────────
+    public function transformAudit(array $data): array
+    {
+        $statusLabels = [
+            'pending'       => 'Pending',
+            'under_review'  => 'Under Review',
+            'approved'      => 'Approved',
+            'rejected'      => 'Rejected',
+            'paid'          => 'Payment Submitted',
+            'permit_issued' => 'Permit Issued',
+        ];
+
+        // Make status human readable in audit log
+        if (isset($data['old_values']['status'])) {
+            $data['old_values']['status'] =
+                $statusLabels[$data['old_values']['status']]
+                ?? $data['old_values']['status'];
+        }
+        if (isset($data['new_values']['status'])) {
+            $data['new_values']['status'] =
+                $statusLabels[$data['new_values']['status']]
+                ?? $data['new_values']['status'];
+        }
+
+        return $data;
+    }
+
     // ── RELATIONSHIPS ───────────────────────────────────────────
 
     // The user who owns this application
@@ -77,9 +128,9 @@ class BusinessApplication extends Model
 
     // The payment for this application
     // Why hasOne? One application has only ONE payment record
-    public function payment()
+    public function payment(): HasOne
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class, 'business_application_id');
     }
 
     // ── HELPERS ─────────────────────────────────────────────────

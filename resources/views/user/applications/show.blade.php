@@ -46,12 +46,17 @@
                 </a>
             @endif
 
-            @if($application->status === 'approved')
-                <a href="{{ route('user.payment.show', ['userId' => Auth::id(), 'application' => $application->id]) }}"
-                   class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-green-700">
-                    <i class="bi bi-credit-card"></i> Pay Now
-                </a>
-            @endif
+            {{-- ── TOP HEADER Pay Now button ──────────────────────────── --}}
+@if($application->status === 'approved' && $application->permit_fee)
+    {{-- ✅ This is GET — goes to payment page first --}}
+    <a href="{{ route('user.payment.show', [
+            'userId'      => Auth::id(),
+            'application' => $application->id
+        ]) }}"
+       class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-green-700">
+        <i class="bi bi-credit-card"></i> Pay Now
+    </a>
+@endif
 
             @if($application->status === 'permit_issued')
                 <a href="{{ route('user.business.renew', ['userId' => Auth::id(), 'application' => $application->id]) }}"
@@ -481,7 +486,7 @@
             <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
                 <i class="bi bi-credit-card text-slate-400"></i> Payment Information
             </h3>
-
+            
             @if($application->payment)
                 @php
                     $paymentStatusConfig = [
@@ -541,6 +546,34 @@
                     </div>
                     <p class="text-sm font-medium text-slate-500">No payment information yet</p>
                     <p class="text-xs text-slate-400 mt-1">Payment details will appear once your application is approved</p>
+                </div>
+            @endif
+            {{-- Only show Pay button when status is approved and fee is set --}}
+            @if ($application->status === 'approved' && $application->permit_fee)
+                <a href="{{ route('user.payment.show', ['userId' => Auth::id(), 'application' => $application->id]) }}"
+                    class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm text-sm">
+                    <i class="bi bi-credit-card-2-front"></i>
+                    Pay Permit Fee — ₱{{ number_format($application->permit_fee, 2) }}
+                </a>
+            @elseif($application->status === 'paid')
+                <div
+                    class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 font-semibold px-6 py-3 rounded-xl text-sm">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Payment Received — Processing Permit
+                </div>
+            @elseif($application->status === 'permit_issued')
+                <a href="{{ route('user.permit.print', ['userId' => Auth::id(), 'application' => $application->id]) }}"
+                    target="_blank"
+                    class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm text-sm">
+                    <i class="bi bi-printer"></i>
+                    Print Permit
+                </a>
+            @else
+                 {{-- pending, under_review, rejected —  no pay button --}}
+                <div
+                    class="inline-flex items-center gap-2 bg-slate-100 text-slate-500 font-medium px-6 py-3 rounded-xl text-sm">
+                    <i class="bi bi-hourglass-split"></i>
+                    Payment unavailable — awaiting approval
                 </div>
             @endif
         </div>

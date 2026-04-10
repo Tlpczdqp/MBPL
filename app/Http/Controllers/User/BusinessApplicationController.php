@@ -61,10 +61,10 @@ class BusinessApplicationController extends Controller
             'business_act'      => 'required|in:Main Office,Branch Office,Admin Office Only,Warehouse,Others',
             'business_act_other' => 'nullable|string',
             // 4 required documents
-            'dti_sec_certificate' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'valid_id'            => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'business_photo'      => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
-            'business_sketch'     => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'dti_sec_certificate' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'valid_id'            => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'business_photo'      => 'required|file|mimes:jpg,jpeg,png,gif|max:10240',
+            'business_sketch'     => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ]);
 
         // Create the application record
@@ -154,6 +154,17 @@ class BusinessApplicationController extends Controller
         return view('user.applications.show', compact('application'));
     }
 
+    //renewIndex
+    public function renewIndex($userId)
+    {
+        $applications = BusinessApplication::where('user_id', $userId)
+            ->where('status', 'permit_issued')
+            ->latest()
+            ->paginate(10);
+
+        return view('user.applications.renew_index', compact('applications'));
+    }
+
     // Show the renewal form pre-filled with old data
     public function renew($userId, BusinessApplication $application)
     {
@@ -195,67 +206,67 @@ class BusinessApplicationController extends Controller
     }
 
     public function viewDocument($userId, BusinessApplication $application, BusinessDocument $document)
-{
-    // Security: ensure document belongs to this application and user
-    abort_if($application->user_id != $userId, 403);
-    abort_if($document->business_application_id != $application->id, 403);
+    {
+        // Security: ensure document belongs to this application and user
+        abort_if($application->user_id != $userId, 403);
+        abort_if($document->business_application_id != $application->id, 403);
 
-    // Check file exists
-    abort_if(!Storage::disk('local')->exists($document->file_path), 404, 'File not found.');
+        // Check file exists
+        abort_if(!Storage::disk('local')->exists($document->file_path), 404, 'File not found.');
 
-    // Return file inline (viewable in browser) or download
-    return response()->file(
-        Storage::disk('local')->path($document->file_path),
-        [
-            'Content-Type' => $document->mime_type,
-            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
-        ]
-    );
-}
+        // Return file inline (viewable in browser) or download
+        return response()->file(
+            Storage::disk('local')->path($document->file_path),
+            [
+                'Content-Type' => $document->mime_type,
+                'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
+            ]
+        );
+    }
 
-/**
- * Delete an application (only if pending or rejected)
- */
-public function destroy($userId, BusinessApplication $application)
-{
-    abort_if($application->user_id != $userId, 403);
+    /**
+     * Delete an application (only if pending or rejected)
+     */
+    public function destroy($userId, BusinessApplication $application)
+    {
+        abort_if($application->user_id != $userId, 403);
 
-    // Only allow deletion if pending or rejected
-    abort_if(
-        !in_array($application->status, ['pending', 'rejected']),
-        403,
-        'Only pending or rejected applications can be deleted.'
-    );
+        // Only allow deletion if pending or rejected
+        abort_if(
+            !in_array($application->status, ['pending', 'rejected']),
+            403,
+            'Only pending or rejected applications can be deleted.'
+        );
 
-    // Delete all uploaded document files from storage
-    foreach ($application->documents as $doc) {
-        if (Storage::disk('local')->exists($doc->file_path)) {
-            Storage::disk('local')->delete($doc->file_path);
+        // Delete all uploaded document files from storage
+        foreach ($application->documents as $doc) {
+            if (Storage::disk('local')->exists($doc->file_path)) {
+                Storage::disk('local')->delete($doc->file_path);
+            }
+            $doc->delete();
         }
-        $doc->delete();
-    }
 
-    // Delete the directory if empty
-    $directory = "documents/{$application->id}";
-    if (Storage::disk('local')->exists($directory)) {
-        Storage::disk('local')->deleteDirectory($directory);
-    }
+        // Delete the directory if empty
+        $directory = "documents/{$application->id}";
+        if (Storage::disk('local')->exists($directory)) {
+            Storage::disk('local')->deleteDirectory($directory);
+        }
 
-    // Delete payment if exists
-    if ($application->payment) {
-        $application->payment->delete();
-    }
+        // Delete payment if exists
+        if ($application->payment) {
+            $application->payment->delete();
+        }
 
-    // Delete notifications related to this application
-    Notification::where('notifiable_type', \App\Models\User::class)
-        ->where('notifiable_id', $userId)
-        ->where('message', 'like', '%' . $application->application_number . '%')
-        ->delete();
+        // Delete notifications related to this application
+        Notification::where('notifiable_type', \App\Models\User::class)
+            ->where('notifiable_id', $userId)
+            ->where('message', 'like', '%' . $application->application_number . '%')
+            ->delete();
 
-    // Delete the application
-    $application->delete();
+        // Delete the application
+        $application->delete();
 
-    return redirect()->route('user.business.index', ['userId' => $userId])
-        ->with('success', 'Application deleted successfully.');
+        return redirect()->route('user.business.index', ['userId' => $userId])
+            ->with('success', 'Application deleted successfully.');
     }
 }

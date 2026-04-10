@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class Employee extends Authenticatable
+class Employee extends Authenticatable implements AuditableContract
 {
-    // Explicitly set the table name
-    // Laravel would guess this automatically but being explicit avoids bugs
     use SoftDeletes;
+    use AuditableTrait; 
     protected $table = 'employees';
 
     // These fields can be filled via create() or update()
@@ -137,10 +138,7 @@ class Employee extends Authenticatable
         return $badges[$this->role] ?? 'bg-slate-100 text-slate-700';
     }
 
-    // ================================================================
-    // RELATIONSHIPS
-    // ================================================================
-
+    
     /**
      * Applications processed by this employee.
      */
@@ -158,10 +156,7 @@ class Employee extends Authenticatable
         return $this->morphMany(Notification::class, 'notifiable');
     }
 
-    // ================================================================
-    // HELPER METHODS
-    // ================================================================
-
+   
     /**
      * Count unread notifications for the navbar bell badge.
      */
@@ -170,5 +165,61 @@ class Employee extends Authenticatable
         return $this->appNotifications()
             ->where('is_read', false)
             ->count();
+    }
+
+     // ── Audit Settings ──────────────────────────────────────
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'restored',
+    ];
+
+    protected $auditInclude = [
+        'name',
+        'email',
+        'role',
+        'position',
+        'is_active',
+    ];
+
+    protected $auditExclude = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $auditThreshold = 30;
+
+    // ── Make role human readable ────────────────────────────
+    public function transformAudit(array $data): array
+    {
+        $roleLabels = [
+            'admin'   => 'Administrator',
+            'manager' => 'Manager',
+            'staff'   => 'Staff',
+        ];
+
+        if (isset($data['old_values']['role'])) {
+            $data['old_values']['role'] =
+                $roleLabels[$data['old_values']['role']]
+                ?? $data['old_values']['role'];
+        }
+        if (isset($data['new_values']['role'])) {
+            $data['new_values']['role'] =
+                $roleLabels[$data['new_values']['role']]
+                ?? $data['new_values']['role'];
+        }
+
+        // Make is_active human readable
+        if (isset($data['old_values']['is_active'])) {
+            $data['old_values']['is_active'] =
+                $data['old_values']['is_active'] ? 'Active' : 'Inactive';
+        }
+        if (isset($data['new_values']['is_active'])) {
+            $data['new_values']['is_active'] =
+                $data['new_values']['is_active'] ? 'Active' : 'Inactive';
+        }
+
+        return $data;
     }
 }

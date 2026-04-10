@@ -61,7 +61,7 @@ class AdminController extends Controller
             'email'       => 'required|email|unique:employees,email',
             'password'    => 'required|string|min:8|confirmed',
             'role'        => 'required|in:admin,manager,staff',
-            'employee_id' => 'nullable|string|unique:',
+            'employee_id' => 'nullable|string|unique:employees,employee_id',
             'department'  => 'nullable|string|max:255',
         ]);
 
@@ -86,9 +86,10 @@ class AdminController extends Controller
 
     public function updateEmployee(Request $request, Employee $employee)
     {
+        // dd($request->all(), $employee->id);
         $request->validate([
             'name'       => 'required|string|max:255',
-            'email'      => 'required|email|unique:employees,email,' . $employee->id,
+            // 'email'      => 'required|email|unique:employees,email,' . $employee->id,
             'role'       => 'required|in:admin,manager,staff',
             'department' => 'nullable|string|max:255',
             'is_active'  => 'boolean',
@@ -98,10 +99,10 @@ class AdminController extends Controller
 
         $data = [
             'name'       => $request->name,
-            'email'      => $request->email,
+            // 'email'      => $request->email,
             'role'       => $request->role,
             'department' => $request->department,
-            'is_active'  => $request->boolean('is_active'),
+            // 'is_active'  => $request->boolean('is_active'),
         ];
 
         // Only update password if provided
@@ -114,6 +115,9 @@ class AdminController extends Controller
         return redirect()->route('employee.admin.employees.index')
             ->with('success', 'Employee updated successfully.');
     }
+
+    
+
 
     //restore employee
     public function restoreEmployee(int $id)
@@ -195,71 +199,92 @@ class AdminController extends Controller
 
     //Manage User
     public function listUsers(Request $request)
-{
-    $search = $request->input('search');
-    $status = $request->input('status');
+    {
+        $search = $request->input('search');
+        $status = $request->input('status');
 
-    $users = \App\Models\User::query()
-        ->when($search, function ($q) use ($search) {
-            $q->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
-            });
-        })
-        ->when($status === 'active',       fn($q) => $q->whereNull('deleted_at'))
-        ->when($status === 'inactive',     fn($q) => $q->whereNotNull('deleted_at'))
-        ->when($status === 'unverified',   fn($q) => $q->where('email_verified', false))
-        ->withTrashed()
-        ->latest()
-        ->paginate(15)
-        ->withQueryString();
+        $users = \App\Models\User::query()
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
+                });
+            })
+            ->when($status === 'active',       fn($q) => $q->whereNull('deleted_at'))
+            ->when($status === 'inactive',     fn($q) => $q->whereNotNull('deleted_at'))
+            ->when($status === 'unverified',   fn($q) => $q->where('email_verified', false))
+            ->withTrashed()
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
-    $counts = [
-        'total'      => \App\Models\User::withTrashed()->count(),
-        'active'     => \App\Models\User::count(),
-        'inactive'   => \App\Models\User::onlyTrashed()->count(),
-        'unverified' => \App\Models\User::where('email_verified', false)->count(),
-    ];
+        $counts = [
+            'total'      => \App\Models\User::withTrashed()->count(),
+            'active'     => \App\Models\User::count(),
+            'inactive'   => \App\Models\User::onlyTrashed()->count(),
+            'unverified' => \App\Models\User::where('email_verified', false)->count(),
+        ];
 
-    return view('employee.admin.users.index', compact('users', 'counts'));
-}
+        return view('employee.admin.users.index', compact('users', 'counts'));
+    }
 
-/**
- * Show a single user with their applications.
- */
-public function showUser(\App\Models\User $user)
-{
-    // Load with trashed so we can still view deactivated users
-    $user = \App\Models\User::withTrashed()->findOrFail($user->id);
-    $user->load('businessApplications');
+    /**
+     * Show a single user with their applications.
+     */
+    public function showUser(\App\Models\User $user)
+    {
+        // Load with trashed so we can still view deactivated users
+        $user = \App\Models\User::withTrashed()->findOrFail($user->id);
+        $user->load('businessApplications');
 
-    return view('employee.admin.users.show', compact('user'));
-}
+        return view('employee.admin.users.show', compact('user'));
+    }
 
-/**
- * Soft delete (deactivate) a user.
- */
-public function destroyUser(\App\Models\User $user)
-{
-    $name = $user->name;
-    $user->delete();
+    /**
+     * Soft delete (deactivate) a user.
+     */
+    public function destroyUser(\App\Models\User $user)
+    {
+        $name = $user->name;
+        $user->delete();
 
-    return redirect()
-        ->route('employee.admin.users.index')
-        ->with('success', "User {$name} has been deactivated.");
-}
+        return redirect()
+            ->route('employee.admin.users.index')
+            ->with('success', "User {$name} has been deactivated.");
+    }
 
-/**
- * Restore a soft-deleted user.
- */
-public function restoreUser(int $id)
-{
-    $user = \App\Models\User::withTrashed()->findOrFail($id);
-    $user->restore();
+    /**
+     * Restore a soft-deleted user.
+     */
+    public function restoreUser(int $id)
+    {
+        $user = \App\Models\User::withTrashed()->findOrFail($id);
+        $user->restore();
 
-    return redirect()
-        ->route('employee.admin.users.index')
-        ->with('success', "User {$user->name} has been reactivated.");
-}
+        return redirect()
+            ->route('employee.admin.users.index')
+            ->with('success', "User {$user->name} has been reactivated.");
+    }
+    
+    public function resetEmployeePassword(Request $request, Employee $employee)
+    {
+        // dd($request->all(), $employee->id);
+        $request->validate([
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed', // requires password_confirmation field
+            ],
+        ]);
+
+        $employee->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()
+            ->route('employee.admin.employees.index')
+            ->with('success', "Password for {$employee->name} has been reset successfully.");
+    }
 }

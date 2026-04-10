@@ -16,6 +16,11 @@ class AuthenticateUser
             return redirect()->route('user.login')
                 ->with('error', 'Please login to continue.');
         }
+        $userId = $request->route('userId');
+        if ($userId && auth('web')->id() != $userId) {
+            abort(403, 'Unauthorized.');
+        }
+        
 
         // Check if email is verified
         $user = Auth::guard('web')->user();

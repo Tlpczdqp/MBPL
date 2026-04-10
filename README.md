@@ -45,3 +45,15 @@ Sample accounts for employee:
     password: Staff@12345
 
 
+1. Use sk_test_ keys in .env 
+2. Click "Pay via PayMongo" button
+3. PayMongo shows the checkout page (like in your screenshot)
+4. Use test card details:
+
+    Card Number : 4343434343434345
+   Expiry      : 12/25
+   CVV         : 123
+    3DS OTP     : 111111
+
+5. Click Continue → Payment succeeds 
+6. Redirected back to your success page

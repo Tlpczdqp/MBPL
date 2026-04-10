@@ -6,13 +6,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
     // DO NOT use Notifiable trait — conflicts with our appNotifications()
     // use Illuminate\Notifications\Notifiable;
 
     use SoftDeletes;
+    use AuditableTrait;
 
     protected $fillable = [
         'name',
@@ -102,12 +105,46 @@ class User extends Authenticatable
         return redirect('/login')->with('success', 'Your account has been deactivated. Contact support to reactivate.');
     }
 
-    
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'restored',
+    ];
 
-    // ── ROLE METHODS DO NOT BELONG HERE ──────────────────────────
-    // isAdmin(), isManager(), isStaff() are on the Employee model ONLY
-    // Users are citizens — they have no role system
-    // If you see this error it means somewhere is calling
-    // auth()->user()->isStaff() instead of
-    // Auth::guard('employee')->user()->isStaff()
+    // ── Only track these columns ────────────────────────────
+    protected $auditInclude = [
+        'name',
+        'email',
+        'is_active',
+        'email_verified_at',
+    ];
+
+    // ── Exclude sensitive fields ────────────────────────────
+    protected $auditExclude = [
+        'password',
+        'remember_token',
+        'facebook_id',
+        'google_id',
+    ];
+
+    // ── Keep last 30 audits per user ────────────────────────
+    protected $auditThreshold = 30;
+
+    // ── Make values human readable ──────────────────────────
+    public function transformAudit(array $data): array
+    {
+        if (isset($data['old_values']['is_active'])) {
+            $data['old_values']['is_active'] =
+                $data['old_values']['is_active'] ? 'Active' : 'Inactive';
+        }
+        if (isset($data['new_values']['is_active'])) {
+            $data['new_values']['is_active'] =
+                $data['new_values']['is_active'] ? 'Active' : 'Inactive';
+        }
+
+        return $data;
+    }
+
+
 }

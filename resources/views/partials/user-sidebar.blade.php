@@ -6,13 +6,12 @@
      ============================================================ --}}
 
 {{-- Dark overlay (mobile only) — clicking it closes the sidebar --}}
-<div id="sidebar-overlay"
-     class="fixed inset-0 z-30 bg-black/50 hidden lg:hidden transition-opacity duration-300">
+<div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/50 hidden lg:hidden transition-opacity duration-300">
 </div>
 
 {{-- SIDEBAR CONTAINER --}}
 <div id="sidebar"
-     class="bg-slate-800 text-white w-[250px] h-screen fixed top-0 left-0
+    class="bg-slate-800 text-white w-[250px] h-screen fixed top-0 left-0
             overflow-y-auto border-r border-slate-700 z-40
             transition-transform duration-300 ease-in-out
             -translate-x-full lg:translate-x-0">
@@ -21,19 +20,17 @@
     <div class="flex items-center justify-between p-4 border-b border-slate-700">
         {{-- Logo: upload your image to public/images/logo.png --}}
         <div class="flex items-center gap-2">
-            <img src="{{ asset('images/logo.png') }}"
-                 alt="Logo"
-                 class="h-9 w-9 object-contain rounded-full bg-slate-600 p-1"
-                 onerror="this.src='https://placehold.co/36x36/475569/white?text=BP'" />
+            <img src="{{ asset('images/logo.png') }}" alt="Logo"
+                class="h-9 w-9 object-contain rounded-full bg-slate-600 p-1"
+                onerror="this.src='https://placehold.co/36x36/475569/white?text=BP'" />
             <span class="text-sm font-bold text-white leading-tight">
                 Municipal<br>Business Permit<br>& Licensing
             </span>
         </div>
 
         {{-- Close button (mobile only) --}}
-        <button id="sidebar-close"
-                class="text-slate-300 hover:text-white lg:hidden focus:outline-none"
-                aria-label="Close Sidebar">
+        <button id="sidebar-close" class="text-slate-300 hover:text-white lg:hidden focus:outline-none"
+            aria-label="Close Sidebar">
             <i class="bi bi-x-lg text-lg"></i>
         </button>
     </div>
@@ -42,13 +39,13 @@
     {{-- Shows the logged-in user's avatar and name --}}
     {{-- <div class="p-4 border-b border-slate-700">
         <div class="flex items-center gap-3">
-            @if(auth()->user()->avatar)
+            @if (auth()->user()->avatar)
                 <img src="{{ auth()->user()->avatar }}"
                      alt="Avatar"
                      class="h-10 w-10 rounded-full object-cover ring-2 ring-slate-600" />
             @else --}}
-                {{-- Default avatar using user's first letter --}}
-                {{-- <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center
+    {{-- Default avatar using user's first letter --}}
+    {{-- <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center
                             text-white font-bold text-sm ring-2 ring-slate-600">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                 </div>
@@ -74,11 +71,11 @@
             {{-- If it matches, we highlight with a different background (active state) --}}
             <li>
                 <a href="{{ route('user.dashboard', ['userId' => auth()->id()]) }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
                           {{ request()->routeIs('user.dashboard')
-                             ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                             : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
-                    <i class="bi bi-folder2-open text-base"></i>
+                              ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                              : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                    <i class="bi bi-speedometer2 text-base"></i>
                     Dashboard
                 </a>
             </li>
@@ -86,10 +83,10 @@
 
             <li>
                 <a href="{{ route('user.business.index', ['userId' => auth()->id()]) }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
                           {{ request()->routeIs('user.business.index')
-                             ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                             : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                              ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                              : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-folder2-open text-base"></i>
                     My Business Applications
                 </a>
@@ -98,10 +95,10 @@
             {{-- Apply for a Business Permit --}}
             <li>
                 <a href="{{ route('user.business.create', ['userId' => auth()->id()]) }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
                           {{ request()->routeIs('user.business.create')
-                             ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                             : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
+                              ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                              : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-file-earmark-plus text-base"></i>
                     Apply for a Permit
                 </a>
@@ -110,9 +107,11 @@
             {{-- Renew Business Permit --}}
             {{-- This links to the user's applications list where they can choose which to renew --}}
             <li>
-                <a href="{{ route('user.business.index', ['userId' => auth()->id()]) }}?filter=renew"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
-                          text-slate-300 hover:text-white hover:bg-slate-700">
+                <a href="{{ route('user.business.renewIndex', ['userId' => auth()->id()]) }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
+              {{ request()->routeIs('user.business.renewIndex')
+                  ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-700' }}">
                     <i class="bi bi-arrow-clockwise text-base"></i>
                     Renew Business Permit
                 </a>
@@ -126,7 +125,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
+                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
                            text-slate-300 hover:text-red-400 hover:bg-slate-700 transition-all duration-200">
                 <i class="bi bi-box-arrow-left text-base"></i>
                 Logout
@@ -138,11 +137,11 @@
 
 {{-- ── SIDEBAR TOGGLE SCRIPT ────────────────────────────────────── --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar  = document.getElementById('sidebar');
-        const overlay  = document.getElementById('sidebar-overlay');
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
         const toggleBtn = document.getElementById('sidebar-toggle');
-        const closeBtn  = document.getElementById('sidebar-close');
+        const closeBtn = document.getElementById('sidebar-close');
         let isOpen = false;
 
         function openSidebar() {
@@ -160,10 +159,14 @@
         }
 
         if (toggleBtn) toggleBtn.addEventListener('click', () => isOpen ? closeSidebar() : openSidebar());
-        if (closeBtn)  closeBtn.addEventListener('click', closeSidebar);
-        if (overlay)   overlay.addEventListener('click', closeSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) closeSidebar(); });
-        window.addEventListener('resize',    () => { if (window.innerWidth >= 1024) closeSidebar(); });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && isOpen) closeSidebar();
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) closeSidebar();
+        });
     });
 </script>

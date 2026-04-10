@@ -504,7 +504,7 @@
                             <i class="bi bi-info-circle text-blue-600 text-lg mt-0.5"></i>
                             <div>
                                 <h4 class="text-sm font-semibold text-blue-800 mb-1">All 4 documents are required</h4>
-                                <p class="text-xs text-blue-600">Accepted formats: JPEG, PNG, PDF, GIF — Max 2MB each</p>
+                                <p class="text-xs text-blue-600">Accepted formats: JPEG, PNG, PDF — Max 10MB each</p>
                             </div>
                         </div>
                     </div>

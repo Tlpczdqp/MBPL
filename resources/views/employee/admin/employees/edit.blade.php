@@ -68,6 +68,7 @@
                             class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm
                                   text-slate-400 bg-slate-50 cursor-not-allowed" />
                     </div>
+                    <input type="hidden" name="email" value="{{ $employee->email }}" />
                 </div>
 
                 {{-- Role --}}

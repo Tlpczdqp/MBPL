@@ -30,7 +30,7 @@ class EmployeeDashboardController extends Controller
 
     public function index()
     {
-        $employee = $this->authenticatedEmployee(); // ✅ IDE knows this is Employee
+        $employee = $this->authenticatedEmployee(); 
 
         $stats = [
             'total'        => BusinessApplication::count(),
@@ -42,14 +42,14 @@ class EmployeeDashboardController extends Controller
             'issued'       => BusinessApplication::where('status', 'permit_issued')->count(),
         ];
 
-        if ($employee->isStaff()) {                    // ✅ No warning
+        if ($employee->isStaff()) {                    
             $recentApplications = BusinessApplication::with('user')
                 ->where('processed_by', $employee->id)
                 ->latest()
                 ->take(5)
                 ->get();
 
-        } elseif ($employee->isManager()) {             // ✅ No warning
+        } elseif ($employee->isManager()) {            
             $recentApplications = BusinessApplication::with('user')
                 ->whereIn('status', ['pending', 'under_review', 'paid'])
                 ->latest()
@@ -64,13 +64,13 @@ class EmployeeDashboardController extends Controller
         }
 
         $myProcessedCount = 0;
-        if ($employee->isStaff()) {                     // ✅ No warning
+        if ($employee->isStaff()) {                     
             $myProcessedCount = BusinessApplication::where('processed_by', $employee->id)
                 ->count();
         }
 
         $totalEmployees = 0;
-        if ($employee->isAdmin()) {                     // ✅ No warning
+        if ($employee->isAdmin()) {                   
             $totalEmployees = Employee::where('is_active', true)->count();
         }
 
@@ -85,7 +85,7 @@ class EmployeeDashboardController extends Controller
 
     public function applications()
     {
-        $employee = $this->authenticatedEmployee();     // ✅ Clean
+        $employee = $this->authenticatedEmployee();     
 
         $applications = BusinessApplication::with('user')
             ->whereIn('status', ['pending', 'under_review'])
@@ -106,7 +106,7 @@ class EmployeeDashboardController extends Controller
 
     public function markUnderReview(BusinessApplication $application)
     {
-        $employee = $this->authenticatedEmployee();     // ✅ Clean
+        $employee = $this->authenticatedEmployee();     
 
         abort_if(
             $application->status !== 'pending',
@@ -132,4 +132,6 @@ class EmployeeDashboardController extends Controller
 
         return back()->with('success', 'Application marked as under review.');
     }
+
+    
 }
