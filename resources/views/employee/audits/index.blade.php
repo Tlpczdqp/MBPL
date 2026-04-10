@@ -98,9 +98,9 @@
                             <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Date & Time
                             </th>
-                            <th class="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            {{-- <th class="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Actions
-                            </th>
+                            </th> --}}
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -186,7 +186,7 @@
                             </td>
 
                             {{-- View Application --}}
-                            <td class="px-5 py-4 text-right">
+                            {{-- <td class="px-5 py-4 text-right">
                                 @if($audit->auditable)
                                     <a href="{{ route('employee.admin.audit.show', $audit->auditable_id) }}"
                                        class="text-xs px-3 py-1.5 rounded-lg border border-slate-200
@@ -194,7 +194,7 @@
                                         View Logs
                                     </a>
                                 @endif
-                            </td>
+                            </td> --}}
 
                         </tr>
                         @endforeach
