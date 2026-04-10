@@ -185,37 +185,40 @@
                     @endphp
 
                     <div class="space-y-3">
-                        @forelse($application->documents as $doc)
-                            <div
-                                class="flex items-center justify-between p-3 rounded-xl
-                                    border border-slate-100 bg-slate-50 hover:bg-slate-100 transition">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="h-10 w-10 rounded-lg bg-blue-100 flex items-center
-                                            justify-center text-blue-600">
-                                        <i
-                                            class="bi {{ $docIcons[$doc->document_type] ?? 'bi-file-earmark' }} text-lg"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-semibold text-slate-800">
-                                            {{ $docLabels[$doc->document_type] ?? $doc->document_type }}
-                                        </p>
-                                        <p class="text-xs text-slate-400">
-                                            {{ $doc->file_name }} · {{ number_format($doc->file_size / 1024, 1) }} KB
-                                        </p>
-                                    </div>
-                                </div>
-                                {{-- View Document button --}}
-                                {{-- In production you'd create a signed URL. For now a simple route. --}}
-                                <span class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium">
-                                    <i class="bi bi-eye mr-1"></i>View
-                                </span>
-                            </div>
-                        @empty
-                            <p class="text-sm text-slate-400 text-center py-4">No documents found.</p>
-                        @endforelse
-                    </div>
+    @forelse($application->documents as $doc)
+        <div
+            class="flex items-center justify-between p-3 rounded-xl
+                border border-slate-100 bg-slate-50 hover:bg-slate-100 transition">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-10 w-10 rounded-lg bg-blue-100 flex items-center
+                        justify-center text-blue-600">
+                    <i class="bi {{ $docIcons[$doc->document_type] ?? 'bi-file-earmark' }} text-lg"></i>
                 </div>
+                <div>
+                    <p class="text-sm font-semibold text-slate-800">
+                        {{ $docLabels[$doc->document_type] ?? $doc->document_type }}
+                    </p>
+                    <p class="text-xs text-slate-400">
+                        {{ $doc->file_name }} · {{ number_format($doc->file_size / 1024, 1) }} KB
+                    </p>
+                </div>
+            </div>
+
+            <a href="{{ route('user.business.document.view', [
+        'userId' => $application->user_id,
+        'application' => $application->id,
+        'document' => $doc->id,
+    ]) }}"
+   target="_blank"
+   class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
+    <i class="bi bi-eye mr-1"></i>View
+</a>
+        </div>
+    @empty
+        <p class="text-sm text-slate-400 text-center py-4">No documents found.</p>
+    @endforelse
+</div>
 
                 
                 {{-- Payment Info (if paid) --}}

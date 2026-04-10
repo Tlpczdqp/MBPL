@@ -205,28 +205,60 @@ class BusinessApplicationController extends Controller
         return view('permits.print', compact('application'));
     }
 
-    public function viewDocument($userId, BusinessApplication $application, BusinessDocument $document)
-    {
-        // Security: ensure document belongs to this application and user
-        abort_if($application->user_id != $userId, 403);
-        abort_if($document->business_application_id != $application->id, 403);
+//     public function viewDocument($userId, BusinessApplication $application, BusinessDocument $document)
+// {
+//     $isUserOwner =
+//         Auth::guard('web')->check() &&
+//         (int) $userId === (int) Auth::id() &&
+//         (int) $application->user_id === (int) Auth::id();
 
-        // Check file exists
-        abort_if(!Storage::disk('local')->exists($document->file_path), 404, 'File not found.');
+//     $isEmployee = Auth::guard('employee')->check();
 
-        // Return file inline (viewable in browser) or download
-        return response()->file(
-            Storage::disk('local')->path($document->file_path),
-            [
-                'Content-Type' => $document->mime_type,
-                'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
-            ]
-        );
-    }
+//     abort_unless($isUserOwner || $isEmployee, 403, 'Unauthorized access.');
+
+//     abort_if((int) $document->business_application_id !== (int) $application->id, 404, 'Document does not belong to this application.');
+
+//     if (!Storage::disk('public')->exists($document->file_path)) {
+//         abort(404, 'Document file not found.');
+//     }
+
+//     return response()->file(
+//         Storage::disk('public')->path($document->file_path),
+//         [
+//             'Content-Type' => $document->mime_type ?? 'application/octet-stream',
+//             'Content-Disposition' => 'inline; filename="' . ($document->file_name ?? 'document') . '"',
+//         ]
+//     );
+// }
 
     /**
      * Delete an application (only if pending or rejected)
      */
+    public function viewDocument($userId, BusinessApplication $application, BusinessDocument $document)
+{
+    $isUserOwner =
+        Auth::guard('web')->check() &&
+        (int) Auth::guard('web')->id() === (int) $userId &&
+        (int) $application->user_id === (int) Auth::guard('web')->id();
+
+    $isEmployee = Auth::guard('employee')->check();
+
+    abort_unless($isUserOwner || $isEmployee, 403);
+
+    abort_if((int) $document->business_application_id !== (int) $application->id, 404);
+
+    if (!Storage::exists($document->file_path)) {
+        abort(404, 'Document file not found.');
+    }
+
+    return response()->file(
+        Storage::path($document->file_path),
+        [
+            'Content-Type' => $document->mime_type ?? 'application/octet-stream',
+            'Content-Disposition' => 'inline; filename="' . ($document->file_name ?? 'document') . '"',
+        ]
+    );
+}
     public function destroy($userId, BusinessApplication $application)
     {
         abort_if($application->user_id != $userId, 403);

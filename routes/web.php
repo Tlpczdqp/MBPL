@@ -52,6 +52,10 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::post('/reset-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'resetPassword'])
         ->name('password.update');
 });
+//view document
+Route::get('/user/{userId}/applications/{application}/document/{document}/view', [BusinessApplicationController::class, 'viewDocument'])
+    ->middleware('auth.user_or_employee')
+    ->name('user.business.document.view');
 
 // Social Auth (Google & Facebook) — users only
 Route::get('/auth/google', [App\Http\Controllers\Auth\SocialAuthController::class, 'redirectToGoogle'])
@@ -133,13 +137,13 @@ Route::prefix('user/{userId}')
         Route::get('/applications/{application}', [BusinessApplicationController::class, 'show'])
             ->name('business.show');
 
-        // ✅ DELETE application (only pending/rejected)
+        // DELETE application (only pending/rejected)
         Route::delete('/applications/{application}', [BusinessApplicationController::class, 'destroy'])
             ->name('business.destroy');
 
-        // ✅ VIEW document file
-        Route::get('/applications/{application}/document/{document}/view', [BusinessApplicationController::class, 'viewDocument'])
-            ->name('business.document.view');
+        // //  VIEW document file
+        // Route::get('/applications/{application}/document/{document}/view', [BusinessApplicationController::class, 'viewDocument'])
+        //     ->name('business.document.view');
 
 
         // Renew Business Permit
@@ -292,6 +296,9 @@ Route::prefix('employee/portal')
             // Verify payments
             Route::post('/payments/{payment}/verify', [App\Http\Controllers\Employee\ManagerController::class, 'verifyPayment'])
                 ->name('payments.verify');
+
+            Route::get('/applications/{application}/documents/{document}/view', [App\Http\Controllers\Employee\ManagerController::class, 'viewDocument'])
+                ->name('applications.documents.view');
         });
 
         // ── STAFF ────────────────────────────────────────────────

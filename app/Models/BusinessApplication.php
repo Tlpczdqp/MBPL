@@ -181,4 +181,20 @@ class BusinessApplication extends Model implements Auditable
 
         return $colors[$this->status] ?? 'bg-slate-100 text-slate-600';
     }
+    public function getPermitValidityDate($fromDate = null)
+{
+    $fromDate = $fromDate ? \Carbon\Carbon::parse($fromDate) : now();
+
+    return match (strtolower(trim($this->billing_freq))) {
+        'monthly'       => $fromDate->copy()->addMonth(),
+        'quarterly'     => $fromDate->copy()->addMonths(3),
+        'bi-annually'   => $fromDate->copy()->addMonths(6),
+        'bi annually'   => $fromDate->copy()->addMonths(6),
+        'semi-annual'   => $fromDate->copy()->addMonths(6),
+        'semi annually' => $fromDate->copy()->addMonths(6),
+        'annually'      => $fromDate->copy()->addYear(),
+        'annual'        => $fromDate->copy()->addYear(),
+        default         => $fromDate->copy()->addYear(),
+    };
+}
 }
