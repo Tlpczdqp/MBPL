@@ -28,6 +28,7 @@
 2. ctrl +click the loaded configuration file or go to the file path. ex."C:\php\php.ini"
 3. add this 
 
+ 
     curl.cainfo = "file-path\local_dev_only\cacert.pem"
     openssl.cafile = "file-path\MBPL\local_dev_only\cacert.pem"
 
@@ -38,13 +39,18 @@
 
 
 **Sample accounts for employee:**
-1. Admin
+Admin
+
     email: admin@mbpl.com
     password: Admin@12345
-2. Manager
+
+Manager
+
     email: manager@mbpl.com
     password: Manager@12345
-3. Staff
+
+Staff
+
     email: staff@mbpl.com
     password: Staff@12345
 
