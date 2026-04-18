@@ -28,21 +28,22 @@
 1. run php --ini in the terminal
 2. ctrl +click the loaded configuration file or go to the file path. ex."C:\php\php.ini"
 3. add this 
-    ```curl.cainfo = "file-path\local_dev_only\cacert.pem"\n
-    openssl.cafile = "file-path\MBPL\local_dev_only\cacert.pem"```
+    curl.cainfo = "file-path\local_dev_only\cacert.pem"
+    openssl.cafile = "file-path\MBPL\local_dev_only\cacert.pem"
 
     Ex.
-    ```curl.cainfo = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"\nopenssl.cafile = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"```
+    curl.cainfo = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
+    openssl.cafile = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
 
 
 **Sample accounts for employee:**
-1. Admin\n
+1. Admin
     email: admin@mbpl.com
     password: Admin@12345
-2. Manager\n
+2. Manager
     email: manager@mbpl.com
     password: Manager@12345
-3. Staff\n
+3. Staff
     email: staff@mbpl.com
     password: Staff@12345
 
@@ -55,9 +56,15 @@ Test Card Payment:
 
 ##**Troubleshooting**
 If audits table in database was not created, run this command 
-```php artisan vendor:publish --provider="OwenIt\Auditing\AuditingServiceProvider"```
+    ```php artisan vendor:publish --provider="OwenIt\Auditing\AuditingServiceProvider"```
 then 
-```php artisan migrate```
+    ```php artisan migrate```
 
 If composer install is not working and throwing an error, please check your php.ini file
-Make sure that 
+
+Make sure that these are not commented: 
+    extension=[pdo_sqlite]  //edit depending on your database
+    extension=fileinfo
+    extension=curl
+
+
