@@ -26,9 +26,9 @@
 **To enable google auth**
 1. run php --ini in the terminal
 2. ctrl +click the loaded configuration file or go to the file path. ex."C:\php\php.ini"
-3. add this 
 
- 
+Then add this:
+
     curl.cainfo = "file-path\local_dev_only\cacert.pem"
     openssl.cafile = "file-path\MBPL\local_dev_only\cacert.pem"
 
@@ -39,6 +39,7 @@
 
 
 **Sample accounts for employee:**
+
 Admin
 
     email: admin@mbpl.com
