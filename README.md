@@ -1,4 +1,4 @@
-**##In order to use this program you need the following:**
+**In order to use this program you need the following:**
 1. Composer
 2. Node.js
 3. Php
@@ -14,24 +14,25 @@
 8. IntelliPHP by DEVSENSE
 9. Composer by DEVSENSE
 
-
-##**Get Started**
+**Get Started**
 1. Create your .env file using the .env.example as the example and put your own paymongo, google auth, facebook auth, and mailer tokens/secret
 2. Open the terminal and type these commands:
-    1. composer install (to install)
+    1. composer install (to install necessary dependencies)
     2. php artisan migrate
     3. php artisan db:seed (to create the sample employee accounts)
-    4. composer run dev (to run the server)
+3. Now you can run the server using ```composer run dev```
 
 
 **To enable google auth**
 1. run php --ini in the terminal
 2. ctrl +click the loaded configuration file or go to the file path. ex."C:\php\php.ini"
 3. add this 
+
     curl.cainfo = "file-path\local_dev_only\cacert.pem"
     openssl.cafile = "file-path\MBPL\local_dev_only\cacert.pem"
 
     Ex.
+
     curl.cainfo = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
     openssl.cafile = "E:\Codesheets v2\New folder\MBPL\local_dev_only\cacert.pem"
 
@@ -54,14 +55,14 @@ Test Card Payment:
     CVV         : 123
 
 
-##**Troubleshooting**
-If audits table in database was not created, run this command 
+**Troubleshooting**
+If audits table in database was not created, run this command in the terminal
 
-    ```php artisan vendor:publish --provider="OwenIt\Auditing\AuditingServiceProvider"```
+    php artisan vendor:publish --provider="OwenIt\Auditing\AuditingServiceProvider"
 
 then 
 
-    ```php artisan migrate```
+    php artisan migrate
 
 If composer install is not working and throwing an error, please check your php.ini file
 
