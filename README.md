@@ -1,4 +1,4 @@
-##**In order to use this program you need the following:**
+**##In order to use this program you need the following:**
 1. Composer
 2. Node.js
 3. Php
@@ -56,13 +56,17 @@ Test Card Payment:
 
 ##**Troubleshooting**
 If audits table in database was not created, run this command 
+
     ```php artisan vendor:publish --provider="OwenIt\Auditing\AuditingServiceProvider"```
+
 then 
+
     ```php artisan migrate```
 
 If composer install is not working and throwing an error, please check your php.ini file
 
 Make sure that these are not commented: 
+
     extension=[pdo_sqlite]  //edit depending on your database
     extension=fileinfo
     extension=curl
